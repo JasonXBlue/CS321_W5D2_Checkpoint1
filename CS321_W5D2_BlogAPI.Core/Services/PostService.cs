@@ -19,10 +19,22 @@ namespace CS321_W5D2_BlogAPI.Core.Services
 
         public Post Add(Post newPost)
         {
-            // TODO: Prevent users from adding to a blog that isn't theirs
+            //  Prevent users from adding to a blog that isn't theirs
+          
             //     Use the _userService to get the current users id.
-            //     You may have to retrieve the blog in order to check user id
-            // TODO: assign the current date to DatePublished
+            var currentUserId = _userService.CurrentUserId;
+
+            //     retrieve the blog in order to check user id
+            var userId = newPost.Blog.UserId;
+
+            if (currentUserId != userId)
+            {
+                throw new ApplicationException("You cannot add to a blog that isn't yours.");
+            }
+
+            // assign the current date to DatePublished
+            newPost.DatePublished = DateTime.Now;
+            
             return _postRepository.Add(newPost);
         }
 
@@ -44,13 +56,37 @@ namespace CS321_W5D2_BlogAPI.Core.Services
         public void Remove(int id)
         {
             var post = this.Get(id);
-            // TODO: prevent user from deleting from a blog that isn't theirs
+            //  prevent user from deleting from a blog that isn't theirs
+
+            //     Use the _userService to get the current users id.
+            var currentUserId = _userService.CurrentUserId;
+
+            //     retrieve the blog in order to check user id
+            var userId = post.Blog.UserId;
+
+            if (currentUserId != userId)
+            {
+                throw new ApplicationException("You cannot delete a blog that isn't yours.");
+            }
+
             _postRepository.Remove(id);
         }
 
         public Post Update(Post updatedPost)
         {
-            // TODO: prevent user from updating a blog that isn't theirs
+            // prevent user from updating a blog that isn't theirs
+
+            //      Use the _userService to get the current users id
+            var currentUserId = _userService.CurrentUserId;
+
+            //      retrieve the blog in order to check user id
+            var userId = updatedPost.Blog.UserId;
+
+            if (currentUserId != userId)
+            {
+                throw new ApplicationException("You cannot update a blog that isn't yours.");
+            }
+
             return _postRepository.Update(updatedPost);
         }
 

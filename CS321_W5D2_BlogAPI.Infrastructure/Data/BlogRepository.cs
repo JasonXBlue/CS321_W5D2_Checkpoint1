@@ -13,45 +13,63 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
 
         public BlogRepository(AppDbContext dbContext) 
         {
-            // TODO: inject AppDbContext
+            _dbContext = dbContext;
         }
 
         public IEnumerable<Blog> GetAll()
         {
-            // TODO: Retrieve all blgs. Include Blog.User.
-            throw new NotImplementedException();
+            // Retrieve all blgs. Include Blog.User.
+            return _dbContext.Blogs
+                .Include(a => a.User)
+                .ToList();
         }
 
         public Blog Get(int id)
         {
-            // TODO: Retrieve the blog by id. Include Blog.User.
-            throw new NotImplementedException();
+            // Retrieve the blog by id. Include Blog.User.
+            return _dbContext.Blogs
+                .Include(a => a.User)
+                .SingleOrDefault(b => b.Id == id);
         }
 
         public Blog Add(Blog blog)
         {
-            // TODO: Add new blog
-            throw new NotImplementedException();
+            // Add new blog
+            _dbContext.Blogs.Add(blog);
+            _dbContext.SaveChanges();
+            return blog;
         }
 
         public Blog Update(Blog updatedItem)
         {
-            // TODO: update blog
-            throw new NotImplementedException();
-            //var existingItem = _dbContext.Find(updatedItem.Id);
-            //if (existingItem == null) return null;
-            //_dbContext.Entry(existingItem)
-            //   .CurrentValues
-            //   .SetValues(updatedItem);
-            //_dbContext.Blogs.Update(existingItem);
-            //_dbContext.SaveChanges();
-            //return existingItem;
+            // update blog
+
+            // get the blog object in the current list 
+            var currentItem = _dbContext.Blogs.Find(updatedItem);
+
+            // return null if blog to update isn't found
+            if (currentItem == null) return null;
+
+            // copy the property values from the changed blog into the
+            // one in the db. NOTE that this is much simpler than individually
+            // copying each property.
+            _dbContext.Entry(currentItem)
+               .CurrentValues
+               .SetValues(updatedItem);
+
+            // update the blog and save
+            _dbContext.Blogs.Update(currentItem);
+            _dbContext.SaveChanges();
+            return currentItem;
         }
 
         public void Remove(int id)
         {
-            // TODO: remove blog
-            throw new NotImplementedException();
+            // remove blog
+            Blog blog = _dbContext.Blogs.Find(id);
+
+            _dbContext.Blogs.Remove(blog);
+            _dbContext.SaveChanges();
         }
     }
 }
