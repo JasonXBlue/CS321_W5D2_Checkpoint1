@@ -29,11 +29,16 @@ namespace CS321_W5D2_BlogAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var blog = _blogService
-                   .GetAll()
-                   .ToApiModels();
-
-            return Ok(blog);
+            try
+            {
+                // to return all blogs
+                return Ok(_blogService.GetAll().ToApiModels());
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("GetBlogs", ex.Message);
+                return BadRequest(ModelState);
+            }
         }
 
         // GET api/blogs/{id}
@@ -43,19 +48,15 @@ namespace CS321_W5D2_BlogAPI.Controllers
         {
             try
             {
-                // TODO: replace the code below with the correct implementation
                 // to return a blog by id
-                return Ok(new BlogModel
+                
                 {
-                    Id = id,
-                    Name = "Fix Me!",
-                    Description = "Implement GET /api/blogs/{id}",
-                    AuthorName = "unknown",
-                });
+                    return Ok(_blogService.Get(id).ToApiModel());
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("GetBlogs", ex.Message);
+                ModelState.AddModelError("GetBlog", ex.Message);
                 return BadRequest(ModelState);
             }
         }
