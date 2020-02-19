@@ -9,7 +9,8 @@ using System.Linq;
 
 namespace CS321_W5D2_BlogAPI.Controllers
 {
-    // TODO: secure controller actions that change data
+    // secure controller actions that change data
+    [Authorize]
     [Route("api/[controller]")]
     public class PostsController : Controller
     {
@@ -60,7 +61,7 @@ namespace CS321_W5D2_BlogAPI.Controllers
 
         }
 
-        // TODO: add a new post to blog
+        // add a new post to blog
 
         // POST /api/blogs/{blogId}/post
         [HttpPost("/api/blogs/{blogId}/posts")]
@@ -69,12 +70,13 @@ namespace CS321_W5D2_BlogAPI.Controllers
 
             try
             {
+                postModel.BlogId = blogId;
                 return Ok(_postService.Add(postModel.ToDomainModel()));
                     
             }
-            catch
+            catch (Exception ex)
             {
-                ModelState.AddModelError("AddPost", "Fix Me! Implement POST /api/blogs{blogId}/posts");
+                ModelState.AddModelError("AddPost", ex.Message);
                 return BadRequest(ModelState);
             }
         }
@@ -95,20 +97,20 @@ namespace CS321_W5D2_BlogAPI.Controllers
             }
         }
 
-        // TODO: delete post by id
+        // delete post by id
 
         // DELETE /api/blogs/{blogId}/posts/{postId}
         [HttpDelete("/api/blogs/{blogId}/posts/{postId}")]
         public IActionResult Delete(int blogId, int postId)
         {
-            // TODO: replace the code below with the correct implementation
             try
             {
-              
+                _postService.Remove(postId);
+                return NoContent();
             }
-            catch
+            catch (Exception ex)
             {
-                ModelState.AddModelError("DeletePost", "Fix Me! Implement DELETE /api/blogs{blogId}/posts/{postId}");
+                ModelState.AddModelError("DeletePost", ex.Message);
                 return BadRequest(ModelState);
             }
         }
