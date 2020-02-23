@@ -26,7 +26,6 @@ namespace CS321_W5D2_BlogAPI.ApiModels
                 Id = blogModel.Id,
                 Name = blogModel.Name,
                 Description = blogModel.Description,
-                AuthorName = blogModel.AuthorName,
             };
         }
 

@@ -32,16 +32,16 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
             return _dbContext.Posts
                 .Include(a => a.Blog)
                 .Include(a => a.Blog.User)
-                .Where(b => b.BlogId == blogId);
+                .Where(b => b.BlogId == blogId);    
             
         }
 
-        public Post Add(Post Post)
+        public Post Add(Post post)
         {
             // add Post
-            _dbContext.Posts.Add(Post);
+            _dbContext.Posts.Add(post);
             _dbContext.SaveChanges();
-            return Post;
+            return post;
         }
 
         public Post Update(Post updatedPost)
@@ -72,17 +72,22 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
         public IEnumerable<Post> GetAll()
         {
             // get all posts
-            return _dbContext.Posts.ToList();
+            return _dbContext.Posts
+                .Include(a => a.Blog);
+                //.ToList();
 
         }
 
         public void Remove(int id)
         {
             // remove Post
-            Post post = _dbContext.Posts.Find(id);
+            var currentPost = _dbContext.Posts.FirstOrDefault(a => a.Id == id);
 
-            _dbContext.Posts.Remove(post);
-            _dbContext.SaveChanges();   
+            if (currentPost != null)
+            {
+                _dbContext.Posts.Remove(currentPost);
+                _dbContext.SaveChanges();
+            }
         }
 
     }

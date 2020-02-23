@@ -13,6 +13,6 @@ namespace CS321_W5D2_BlogAPI.Core.Models
         public AppUser User { get; set; }
 
         public ICollection<Post> Posts { get; set; }
-        public string AuthorName { get; set; }
+        
     }
 }

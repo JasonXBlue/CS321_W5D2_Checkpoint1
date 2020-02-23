@@ -115,7 +115,7 @@ namespace CS321_W5D2_BlogAPI
 
             // add call to dbInitializer
 
-            dbInitializer.Initialize();
+          //  dbInitializer.Initialize();
 
         }
     }

@@ -66,7 +66,7 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
         public void Remove(int id)
         {
             // remove blog
-            Blog blog = _dbContext.Blogs.Find(id);
+            var blog = _dbContext.Blogs.FirstOrDefault(a => a.Id == id);
 
             _dbContext.Blogs.Remove(blog);
             _dbContext.SaveChanges();

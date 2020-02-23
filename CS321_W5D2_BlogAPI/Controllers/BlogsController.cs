@@ -37,6 +37,7 @@ namespace CS321_W5D2_BlogAPI.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("GetBlogs", ex.Message);
+                Console.WriteLine(ex.Message);
                 return BadRequest(ModelState);
             }
         }

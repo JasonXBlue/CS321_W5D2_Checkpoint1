@@ -50,8 +50,8 @@ namespace CS321_W5D2_BlogAPI.Controllers
         {
             try
             {
-                return Ok(_postService.GetBlogPosts(blogId).ToApiModels()
-                    .Where(a => a.Id == postId));
+                return Ok(_postService.Get(postId).ToApiModel());
+                  
             }
             catch (Exception ex)
             {
@@ -70,9 +70,9 @@ namespace CS321_W5D2_BlogAPI.Controllers
 
             try
             {
-                postModel.BlogId = blogId;
-                return Ok(_postService.Add(postModel.ToDomainModel()));
-                    
+                _postService.Add(postModel.ToDomainModel());
+                return CreatedAtAction("Post", new { id = postModel.Id }, postModel);
+
             }
             catch (Exception ex)
             {
@@ -87,8 +87,7 @@ namespace CS321_W5D2_BlogAPI.Controllers
         {
             try
             {
-                var updatedPost = _postService.Update(postModel.ToDomainModel());
-                return Ok(updatedPost);
+                return Ok(_postService.Update(postModel.ToDomainModel()));
             }
             catch (Exception ex)
             {
